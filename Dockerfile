@@ -1,5 +1,7 @@
 FROM texlive/texlive:latest
 
+RUN apt update && apt install wget
+
 RUN wget "https://mirror.ctan.org/systems/texlive/tlnet/update-tlmgr-latest.sh" && sh update-tlmgr-latest.sh
 
 # This must be before install texlive-full
