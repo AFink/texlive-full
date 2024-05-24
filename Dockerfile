@@ -4,6 +4,7 @@ FROM debian:12.5-slim
 RUN apt-get update -q \
     && apt-get install -y \
         git \
+        curl \
         wget \
         libfontconfig1 \
         python3 \
@@ -13,7 +14,10 @@ RUN apt-get update -q \
         tar \
         lmodern \
         gnupg2 \
+        python3 \
+        python3-pygments \
         python3-pip \
+        python3-venv \
         libfontconfig1 \
     && apt-get purge -y \
     && apt-get clean \
@@ -65,35 +69,27 @@ RUN set -x \
 # installing texlive and utils
 RUN apt update \
   && apt install -y \
-  curl \
-  wget \
-  locales \
-  git \
-  make \
-  fontconfig \
-  default-jre \
-  python3 \
-  python3-pygments \
-  python3-pip \
-  python3-venv \
-  swath \
-  liblog-log4perl-perl \
-  libyaml-tiny-perl \
-  libfile-homedir-perl \
-  libunicode-linebreak-perl \
-  graphviz \
-  pandoc \
- # texlive \
- # texlive-full \
-  texlive-latex-extra \
-  texlive-extra-utils \
-  texlive-fonts-extra \
-  texlive-bibtex-extra \
-  texlive-lang-german \
-  biber \
-  latexmk \
-  procps \
-  inkscape \
+    locales \
+    fontconfig \
+    default-jre \
+    swath \
+    liblog-log4perl-perl \
+    libyaml-tiny-perl \
+    libfile-homedir-perl \
+    libunicode-linebreak-perl \
+    graphviz \
+    pandoc \
+    texlive-latex-extra \
+    texlive-extra-utils \
+    texlive-fonts-extra \
+    texlive-bibtex-extra \
+    texlive-lang-german \
+    biber \
+    latexmk \
+    procps \
+    inkscape \
+    # texlive \
+    # texlive-full \
   && apt-get clean autoclean \
   && apt-get autoremove --yes \
   && rm -rf /var/lib/apt/lists/*
