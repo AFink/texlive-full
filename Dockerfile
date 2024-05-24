@@ -1,6 +1,8 @@
 FROM debian:12.5-slim
 
-RUN wget http://mirrors.rit.edu/CTAN/systems/texlive/tlnet/install-tl-unx.tar.gz \
+RUN apt update \
+    && apt install -y wget \
+    && wget http://mirrors.rit.edu/CTAN/systems/texlive/tlnet/install-tl-unx.tar.gz \
     && mkdir install-tl \
     && tar xf install-tl-unx.tar.gz -C install-tl --strip-components=1 \
     && ./install-tl/install-tl -profile ./texlive.profile --location http://mirrors.rit.edu/CTAN/systems/texlive/tlnet \
