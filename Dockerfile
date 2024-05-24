@@ -15,11 +15,6 @@ RUN apt-get update -q \
         gnupg2 \
         python3-pip \
         libfontconfig1 \
-    && pip3 install --no-cache \
-        panflute \
-        pantable \
-        click==7.1.2 \
-        pandoc-acronyms \
     && apt-get purge -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
