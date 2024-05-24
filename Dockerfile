@@ -22,7 +22,7 @@ RUN apt-get update -q \
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 100
 
 # Install TexLive with scheme-basic
-RUN wget http://mirrors.rit.edu/CTAN/systems/texlive/tlnet/install-tl-unx.tar.gz \
+RUN wget hhttp://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz \
     && mkdir /install-tl-unx \
     && tar -xvf install-tl-unx.tar.gz -C /install-tl-unx --strip-components=1 \
     && echo "selected_scheme scheme-basic" >> /install-tl-unx/texlive.profile \
