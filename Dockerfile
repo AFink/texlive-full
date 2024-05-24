@@ -1,14 +1,47 @@
 FROM debian:12.5-slim
 
-RUN apt update \
-    && apt install -y wget \
-    && wget http://mirrors.rit.edu/CTAN/systems/texlive/tlnet/install-tl-unx.tar.gz \
-    && mkdir install-tl \
-    && tar xf install-tl-unx.tar.gz -C install-tl --strip-components=1 \
-    && ./install-tl/install-tl -profile ./texlive.profile --location http://mirrors.rit.edu/CTAN/systems/texlive/tlnet \
-    && rm -rf install-tl && rm -f install-tl-unx.tar.gz
 
-ENV PATH /usr/local/texlive/distribution/bin/armhf-linux:$PATH
+RUN apt-get update -q \
+    && apt-get install -y 
+        git \
+        wget \
+        libfontconfig1 \
+        python3 \
+        make \
+        ghostscript \
+        perl \
+        tar \
+        lmodern \
+        gnupg2 \
+        python3 \
+        python3-pip \
+        python3-distutils \
+        libfontconfig1 \
+    && pip3 install --no-cache 
+        panflute \
+        pantable \
+        click==7.1.2 \
+        pandoc-acronyms \
+    && apt-get purge -y \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+    
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 100
+
+# Install TexLive with scheme-basic
+RUN wget http://mirrors.rit.edu/CTAN/systems/texlive/tlnet/install-tl-unx.tar.gz \
+    && mkdir /install-tl-unx \
+    && tar -xvf install-tl-unx.tar.gz -C /install-tl-unx --strip-components=1 \
+    && echo "selected_scheme scheme-basic" >> /install-tl-unx/texlive.profile \
+    && echo "tlpdbopt_autobackup 0" >> /install-tl-unx/texlive.profilE \
+    && echo "tlpdbopt_install_docfiles 0" >> /install-tl-unx/texlive.profile \
+    && echo "tlpdbopt_install_srcfiles 0" >> /install-tl-unx/texlive.profile \
+    && /install-tl-unx/install-tl -profile /install-tl-unx/texlive.profile \
+    && rm -r /install-tl-unx \
+    && rm install-tl-unx.tar.gz
+
+ENV PATH="/usr/local/texlive/2024/bin/x86_64-linux:${PATH}"
+
 
 # This must be before install texlive-full
 RUN set -x \
@@ -38,8 +71,8 @@ RUN apt update \
   libunicode-linebreak-perl \
   graphviz \
   pandoc \
-  texlive \
-  texlive-full \
+ # texlive \
+ # texlive-full \
   texlive-latex-extra \
   texlive-extra-utils \
   texlive-fonts-extra \
