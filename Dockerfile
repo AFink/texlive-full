@@ -1,6 +1,40 @@
 FROM debian:12.5-slim
 
-RUN apt update && apt install wget
+# installing texlive and utils
+RUN apt update \
+  && apt install -y \
+  curl \
+  wget \
+  locales \
+  git \
+  make \
+  fontconfig \
+  default-jre \
+  python3 \
+  python3-pygments \
+  python3-pip \
+  python3-venv \
+  swath \
+  liblog-log4perl-perl \
+  libyaml-tiny-perl \
+  libfile-homedir-perl \
+  libunicode-linebreak-perl \
+  graphviz \
+  pandoc \
+  texlive \
+  texlive-full \
+  texlive-latex-extra \
+  texlive-extra-utils \
+  texlive-fonts-extra \
+  texlive-bibtex-extra \
+  texlive-lang-german \
+  biber \
+  latexmk \
+  procps \
+  inkscape \
+  && apt-get clean autoclean \
+  && apt-get autoremove --yes \
+  && rm -rf /var/lib/apt/lists/*
 
 RUN wget "https://mirror.ctan.org/systems/texlive/tlnet/update-tlmgr-latest.sh" && sh update-tlmgr-latest.sh
 
@@ -10,11 +44,6 @@ RUN set -x \
     && tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet/ \
     && tlmgr update --self \
     && tlmgr install scheme-full
-
-# installing texlive and utils
-RUN apt-get update && \
-apt-get -y install --no-install-recommends python3 python3-pip default-jre graphviz pandoc texlive texlive-full texlive-latex-extra texlive-extra-utils texlive-fonts-extra texlive-bibtex-extra texlive-lang-german biber latexmk make inkscape git procps locales curl && \
-rm -rf /var/lib/apt/lists/*
 
 # generating locales
 RUN sed -i -e 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
