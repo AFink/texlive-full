@@ -13,9 +13,7 @@ RUN apt-get update -q \
         tar \
         lmodern \
         gnupg2 \
-        python3 \
         python3-pip \
-        python3-distutils \
         libfontconfig1 \
     && pip3 install --no-cache \
         panflute \
