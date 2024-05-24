@@ -2,7 +2,7 @@ FROM debian:12.5-slim
 
 
 RUN apt-get update -q \
-    && apt-get install -y 
+    && apt-get install -y \
         git \
         wget \
         libfontconfig1 \
@@ -17,7 +17,7 @@ RUN apt-get update -q \
         python3-pip \
         python3-distutils \
         libfontconfig1 \
-    && pip3 install --no-cache 
+    && pip3 install --no-cache \
         panflute \
         pantable \
         click==7.1.2 \
