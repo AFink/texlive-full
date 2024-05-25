@@ -44,7 +44,7 @@ jobs:
           context: .
           file: Dockerfile
           target: base
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:base
+           tags: ${{ env.REGISTRY }}/$(echo "${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]'):base
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: true
@@ -86,7 +86,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ${{ env.REGISTRY }}/$(echo "${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]')
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
