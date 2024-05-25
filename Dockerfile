@@ -40,11 +40,10 @@ FROM base as dist
 # Define build arguments for TexLive year and scheme
 ARG TEXLIVE_YEAR=2024
 ARG TEXLIVE_SCHEME=scheme-full
-ARG TEXLIVE_MIRROR=https://mirror.ctan.org/systems/texlive/tlnet
 
 # Install TexLive
 RUN if [ "$TEXLIVE_YEAR" = "2024" ]; then \
-    export TEXLIVE_REPOSITORY=$TEXLIVE_MIRROR; \
+    export TEXLIVE_REPOSITORY=https://mirror.ctan.org/systems/texlive/tlnet; \
     else \
     export TEXLIVE_REPOSITORY=https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$TEXLIVE_YEAR/tlnet-final/; \
     fi \
@@ -52,9 +51,9 @@ RUN if [ "$TEXLIVE_YEAR" = "2024" ]; then \
     &&  wget --quiet https://tug.org/texlive/files/texlive.asc \
     &&  gpg --import texlive.asc \
     &&  rm texlive.asc \
-    &&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz \
-    &&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz.sha512 \
-    &&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz.sha512.asc \
+    &&  wget --quiet $TEXLIVE_REPOSITORY/install-tl-unx.tar.gz \
+    &&  wget --quiet $TEXLIVE_REPOSITORY/install-tl-unx.tar.gz.sha512 \
+    &&  wget --quiet $TEXLIVE_REPOSITORY/install-tl-unx.tar.gz.sha512.asc \
     &&  gpg --verify install-tl-unx.tar.gz.sha512.asc \
     &&  sha512sum -c install-tl-unx.tar.gz.sha512 \
     &&  tar -xz -C /install-tl-unx --strip-components=1 -f install-tl-unx.tar.gz \
