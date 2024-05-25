@@ -37,6 +37,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/base
+
       - name: Build and push base Docker image
         id: build_base
         uses: docker/build-push-action@v5
@@ -44,7 +50,7 @@ jobs:
           context: .
           file: Dockerfile
           target: base
-          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}/base:latest
+          tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: true
