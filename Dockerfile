@@ -8,7 +8,6 @@ RUN apt update -q \
         libfontconfig1 \
         locales \
         fontconfig \
-        default-jre \
         make \
         ghostscript \
         perl \
@@ -38,7 +37,7 @@ RUN apt update -q \
 FROM base as dist
 
 # Define build arguments for TexLive year and scheme
-ARG TEXLIVE_YEAR=2024
+ARG TEXLIVE_YEAR=$(date +%Y)
 ARG TEXLIVE_SCHEME=scheme-full
 
 # Install TexLive
@@ -68,12 +67,7 @@ RUN if [ "$TEXLIVE_YEAR" = "$(date +%Y)" ]; then \
     &&  $(find /usr/local/texlive -name tlmgr) path add \
     &&  rm -rf /install-tl-unx
 
-# This must be before install texlive-full
-#RUN set -x \
-#    && tlmgr init-usertree \
-#    && tlmgr option repository ${TEXLIVE_MIRROR} \
-#    && tlmgr update --self \
-#    && tlmgr install scheme-full
+ENV PATH="/usr/local/texlive/${TEXLIVE_YEAR}/bin/x86_64-linux:${PATH}"
 
 # installing texlive and utils
 #RUN apt update \
