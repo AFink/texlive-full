@@ -42,7 +42,7 @@ ARG TEXLIVE_YEAR=2024
 ARG TEXLIVE_SCHEME=scheme-full
 
 # Install TexLive
-RUN if [ "$TEXLIVE_YEAR" = "2024" ]; then \
+RUN if [ "$TEXLIVE_YEAR" = "$(date +%Y)" ]; then \
     export TEXLIVE_REPOSITORY=https://mirror.ctan.org/systems/texlive/tlnet; \
     else \
     export TEXLIVE_REPOSITORY=https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$TEXLIVE_YEAR/tlnet-final/; \
