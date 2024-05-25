@@ -37,22 +37,22 @@ RUN apt update -q \
 FROM base as dist
 
 # Define build arguments for TexLive year and scheme
-ARG TEXLIVE_YEAR=$(date +%Y)
-ARG TEXLIVE_SCHEME=scheme-full
+ARG BUILD_YEAR=$(date +%Y)
+ARG BUILD_SCHEME=scheme-full
 
 # Install TexLive
-RUN if [ "$TEXLIVE_YEAR" = "$(date +%Y)" ]; then \
-    export TEXLIVE_REPOSITORY=https://mirror.ctan.org/systems/texlive/tlnet; \
+RUN if [ "$BUILD_YEAR" = "$(date +%Y)" ]; then \
+    export BUILD_REPOSITORY=https://mirror.ctan.org/systems/texlive/tlnet; \
     else \
-    export TEXLIVE_REPOSITORY=https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$TEXLIVE_YEAR/tlnet-final/; \
+    export BUILD_REPOSITORY=https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$BUILD_YEAR/tlnet-final/; \
     fi \
     && mkdir /install-tl-unx \
     &&  wget --quiet https://tug.org/texlive/files/texlive.asc \
     &&  gpg --import texlive.asc \
     &&  rm texlive.asc \
-    &&  wget --quiet $TEXLIVE_REPOSITORY/install-tl-unx.tar.gz \
-    &&  wget --quiet $TEXLIVE_REPOSITORY/install-tl-unx.tar.gz.sha512 \
-    &&  wget --quiet $TEXLIVE_REPOSITORY/install-tl-unx.tar.gz.sha512.asc \
+    &&  wget --quiet $BUILD_REPOSITORY/install-tl-unx.tar.gz \
+    &&  wget --quiet $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512 \
+    &&  wget --quiet $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512.asc \
     &&  gpg --verify install-tl-unx.tar.gz.sha512.asc \
     &&  sha512sum -c install-tl-unx.tar.gz.sha512 \
     &&  tar -xz -C /install-tl-unx --strip-components=1 -f install-tl-unx.tar.gz \
@@ -60,14 +60,14 @@ RUN if [ "$TEXLIVE_YEAR" = "$(date +%Y)" ]; then \
     &&  echo "tlpdbopt_autobackup 0" >> /install-tl-unx/texlive.profile \
     &&  echo "tlpdbopt_install_docfiles 0" >> /install-tl-unx/texlive.profile \
     &&  echo "tlpdbopt_install_srcfiles 0" >> /install-tl-unx/texlive.profile \
-    &&  echo "selected_scheme ${TEXLIVE_SCHEME}" >> /install-tl-unx/texlive.profile \
+    &&  echo "selected_scheme ${BUILD_SCHEME}" >> /install-tl-unx/texlive.profile \
     &&  /install-tl-unx/install-tl \
         -profile /install-tl-unx/texlive.profile \
-        -repository $TEXLIVE_REPOSITORY \
+        -repository $BUILD_REPOSITORY \
     &&  $(find /usr/local/texlive -name tlmgr) path add \
     &&  rm -rf /install-tl-unx
 
-ENV PATH="/usr/local/texlive/${TEXLIVE_YEAR}/bin/x86_64-linux:${PATH}"
+ENV PATH="/usr/local/texlive/${BUILD_YEAR}/bin/x86_64-linux:${PATH}"
 
 # installing texlive and utils
 #RUN apt update \

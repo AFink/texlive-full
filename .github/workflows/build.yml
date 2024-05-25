@@ -99,8 +99,8 @@ jobs:
         with:
           context: .
           build-args: |
-            TEXLIVE_YEAR=${{ matrix.texlive-year }}
-            TEXLIVE_SCHEME=${{ matrix.texlive-scheme }}
+            BUILD_YEAR=${{ matrix.texlive-year }}
+            BUILD_SCHEME=${{ matrix.texlive-scheme }}
           tags: ${{ steps.meta.outputs.tags }}-${{ matrix.texlive-year }}-${{ matrix.texlive-scheme }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
