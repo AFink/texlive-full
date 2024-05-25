@@ -41,16 +41,16 @@ FROM base as dist
 ARG TEXLIVE_YEAR=2024
 ARG TEXLIVE_SCHEME=scheme-full
 ARG TEXLIVE_MIRROR=https://mirror.ctan.org/systems/texlive/tlnet
-ARG TEXLIVE_REPOSITORY=https://mirror.ctan.org/systems/texlive/tlnet
+ARG TEXLIVE_REPOSITORY=${TEXLIVE_MIRROR}/${TEXLIVE_YEAR}
 
 # Install TexLive
 RUN mkdir /install-tl-unx \
 &&  wget --quiet https://tug.org/texlive/files/texlive.asc \
 &&  gpg --import texlive.asc \
 &&  rm texlive.asc \
-&&  wget --quiet ${TEXLIVE_MIRROR}/${TEXLIVE_YEAR}/install-tl-unx.tar.gz \
-&&  wget --quiet ${TEXLIVE_MIRROR}/${TEXLIVE_YEAR}/install-tl-unx.tar.gz.sha512 \
-&&  wget --quiet ${TEXLIVE_MIRROR}/${TEXLIVE_YEAR}/install-tl-unx.tar.gz.sha512.asc \
+&&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz \
+&&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz.sha512 \
+&&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz.sha512.asc \
 &&  gpg --verify install-tl-unx.tar.gz.sha512.asc \
 &&  sha512sum -c install-tl-unx.tar.gz.sha512 \
 &&  tar -xz -C /install-tl-unx --strip-components=1 -f install-tl-unx.tar.gz \
