@@ -44,7 +44,7 @@ jobs:
           context: .
           file: Dockerfile
           target: base
-           tags: ${{ env.REGISTRY }}/$(echo "${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]'):base
+          tags: ${{ env.REGISTRY }}/$(echo "${{ env.IMAGE_NAME }}" | tr '[:upper:]' '[:lower:]'):base
           cache-from: type=gha
           cache-to: type=gha,mode=max
           push: true
