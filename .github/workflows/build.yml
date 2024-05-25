@@ -58,8 +58,8 @@ jobs:
           file: Dockerfile
           target: base
           tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:base
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,push=true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           push: true
 
   build-and-push-images:
@@ -102,6 +102,6 @@ jobs:
             TEXLIVE_SCHEME=${{ matrix.texlive-scheme }}
           tags: ${{ steps.meta.outputs.tags }}-${{ matrix.texlive-year }}-${{ matrix.texlive-scheme }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache-new,push=true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
           push: true
