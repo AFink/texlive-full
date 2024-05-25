@@ -53,7 +53,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
-          push: true
+          push: false
 
   build-and-push-images:
     runs-on: ubuntu-latest
