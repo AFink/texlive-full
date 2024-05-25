@@ -35,27 +35,22 @@ RUN apt update -q \
     
 RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 100
 
-
-
 FROM base as dist
 
-# Install TexLive
-# ---------------
-# CTAN mirrors occasionally fail, in that case install TexLive using a
-# different server, for example https://ctan.crest.fr
-#
-# # docker build \
-#     --build-arg TEXLIVE_MIRROR=https://ctan.crest.fr/tex-archive/systems/texlive/tlnet \
-#     -f Dockerfile-base -t sharelatex/sharelatex-base .
-ARG TEXLIVE_MIRROR=https://mirror.ox.ac.uk/sites/ctan.org/systems/texlive/tlnet
+# Define build arguments for TexLive year and scheme
+ARG TEXLIVE_YEAR=2024
+ARG TEXLIVE_SCHEME=scheme-full
+ARG TEXLIVE_MIRROR=https://mirror.ctan.org/systems/texlive/tlnet
+ARG TEXLIVE_REPOSITORY=https://mirror.ctan.org/systems/texlive/tlnet
 
+# Install TexLive
 RUN mkdir /install-tl-unx \
 &&  wget --quiet https://tug.org/texlive/files/texlive.asc \
 &&  gpg --import texlive.asc \
 &&  rm texlive.asc \
-&&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz \
-&&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz.sha512 \
-&&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz.sha512.asc \
+&&  wget --quiet ${TEXLIVE_MIRROR}/${TEXLIVE_YEAR}/install-tl-unx.tar.gz \
+&&  wget --quiet ${TEXLIVE_MIRROR}/${TEXLIVE_YEAR}/install-tl-unx.tar.gz.sha512 \
+&&  wget --quiet ${TEXLIVE_MIRROR}/${TEXLIVE_YEAR}/install-tl-unx.tar.gz.sha512.asc \
 &&  gpg --verify install-tl-unx.tar.gz.sha512.asc \
 &&  sha512sum -c install-tl-unx.tar.gz.sha512 \
 &&  tar -xz -C /install-tl-unx --strip-components=1 -f install-tl-unx.tar.gz \
@@ -63,10 +58,10 @@ RUN mkdir /install-tl-unx \
 &&  echo "tlpdbopt_autobackup 0" >> /install-tl-unx/texlive.profile \
 &&  echo "tlpdbopt_install_docfiles 0" >> /install-tl-unx/texlive.profile \
 &&  echo "tlpdbopt_install_srcfiles 0" >> /install-tl-unx/texlive.profile \
-&&  echo "selected_scheme scheme-full" >> /install-tl-unx/texlive.profile \
+&&  echo "selected_scheme ${TEXLIVE_SCHEME}" >> /install-tl-unx/texlive.profile \
 &&  /install-tl-unx/install-tl \
       -profile /install-tl-unx/texlive.profile \
-      -repository ${TEXLIVE_MIRROR} \
+      -repository ${TEXLIVE_REPOSITORY} \
 &&  $(find /usr/local/texlive -name tlmgr) path add \
 &&  rm -rf /install-tl-unx
 
