@@ -101,7 +101,7 @@ jobs:
           build-args: |
             TEXLIVE_YEAR=${{ matrix.texlive-year }}
             TEXLIVE_SCHEME=${{ matrix.texlive-scheme }}
-          tags: ${{ matrix.texlive-year }}-${{ matrix.texlive-scheme }}
+          tags: ${{ steps.meta.outputs.tags }}-${{ matrix.texlive-year }}-${{ matrix.texlive-scheme }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
