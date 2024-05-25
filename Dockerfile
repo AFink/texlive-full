@@ -41,30 +41,33 @@ FROM base as dist
 ARG TEXLIVE_YEAR=2024
 ARG TEXLIVE_SCHEME=scheme-full
 ARG TEXLIVE_MIRROR=https://mirror.ctan.org/systems/texlive/tlnet
-ARG TEXLIVE_REPOSITORY=${TEXLIVE_MIRROR}/${TEXLIVE_YEAR}
 
 # Install TexLive
-RUN mkdir /install-tl-unx \
-&&  wget --quiet https://tug.org/texlive/files/texlive.asc \
-&&  gpg --import texlive.asc \
-&&  rm texlive.asc \
-&&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz \
-&&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz.sha512 \
-&&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz.sha512.asc \
-&&  gpg --verify install-tl-unx.tar.gz.sha512.asc \
-&&  sha512sum -c install-tl-unx.tar.gz.sha512 \
-&&  tar -xz -C /install-tl-unx --strip-components=1 -f install-tl-unx.tar.gz \
-&&  rm install-tl-unx.tar.gz* \
-&&  echo "tlpdbopt_autobackup 0" >> /install-tl-unx/texlive.profile \
-&&  echo "tlpdbopt_install_docfiles 0" >> /install-tl-unx/texlive.profile \
-&&  echo "tlpdbopt_install_srcfiles 0" >> /install-tl-unx/texlive.profile \
-&&  echo "selected_scheme ${TEXLIVE_SCHEME}" >> /install-tl-unx/texlive.profile \
-&&  /install-tl-unx/install-tl \
-      -profile /install-tl-unx/texlive.profile \
-      -repository ${TEXLIVE_REPOSITORY} \
-&&  $(find /usr/local/texlive -name tlmgr) path add \
-&&  rm -rf /install-tl-unx
-
+RUN if [ "$TEXLIVE_YEAR" = "2024" ]; then \
+    export TEXLIVE_REPOSITORY=$TEXLIVE_MIRROR; \
+    else \
+    export TEXLIVE_REPOSITORY=https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$TEXLIVE_YEAR/tlnet-final/; \
+    fi \
+    && mkdir /install-tl-unx \
+    &&  wget --quiet https://tug.org/texlive/files/texlive.asc \
+    &&  gpg --import texlive.asc \
+    &&  rm texlive.asc \
+    &&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz \
+    &&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz.sha512 \
+    &&  wget --quiet ${TEXLIVE_MIRROR}/install-tl-unx.tar.gz.sha512.asc \
+    &&  gpg --verify install-tl-unx.tar.gz.sha512.asc \
+    &&  sha512sum -c install-tl-unx.tar.gz.sha512 \
+    &&  tar -xz -C /install-tl-unx --strip-components=1 -f install-tl-unx.tar.gz \
+    &&  rm install-tl-unx.tar.gz* \
+    &&  echo "tlpdbopt_autobackup 0" >> /install-tl-unx/texlive.profile \
+    &&  echo "tlpdbopt_install_docfiles 0" >> /install-tl-unx/texlive.profile \
+    &&  echo "tlpdbopt_install_srcfiles 0" >> /install-tl-unx/texlive.profile \
+    &&  echo "selected_scheme ${TEXLIVE_SCHEME}" >> /install-tl-unx/texlive.profile \
+    &&  /install-tl-unx/install-tl \
+        -profile /install-tl-unx/texlive.profile \
+        -repository $TEXLIVE_REPOSITORY \
+    &&  $(find /usr/local/texlive -name tlmgr) path add \
+    &&  rm -rf /install-tl-unx
 
 # This must be before install texlive-full
 #RUN set -x \
