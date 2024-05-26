@@ -1,10 +1,13 @@
 FROM debian:12.5-slim as base
 
+ARG PLANTUML_URL=http://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
+
 RUN apt update -q \
     && apt install -y \
         git \
         curl \
         wget \
+        default-jre \
         libfontconfig1 \
         locales \
         fontconfig \
@@ -32,8 +35,12 @@ RUN apt update -q \
     && apt purge -y \
     && apt clean autoclean \
     && rm -rf /var/lib/apt/lists/*
-    
-# RUN update-alternatives --install /usr/bin/python python /usr/bin/python3 100
+
+RUN mkdir -p /opt/plantuml \
+    && curl -o /opt/plantuml/plantuml.jar -L "${PLANTUML_URL}" \
+    && printf '#!/bin/sh\nexec java -Djava.awt.headless=true -jar /opt/plantuml/plantuml.jar "$@"' > /usr/bin/plantuml \
+    && chmod +x /usr/bin/plantuml
+
 
 FROM base as dist
 
