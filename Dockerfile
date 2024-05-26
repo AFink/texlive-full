@@ -27,6 +27,7 @@ RUN apt update -q \
         graphviz \
         pandoc \
         inkscape \
+        lilypond \
         procps \
     && apt purge -y \
     && apt clean autoclean \
@@ -65,7 +66,10 @@ RUN if [ "$BUILD_YEAR" = "$(date +%Y)" ]; then \
         -profile /install-tl-unx/texlive.profile \
         -repository $BUILD_REPOSITORY \
     &&  $(find /usr/local/texlive -name tlmgr) path add \
-    &&  rm -rf /install-tl-unx
+    &&  rm -rf /install-tl-unx \
+    # enable shell-escape by default
+    && echo % enable shell-escape by default >> /usr/local/texlive/$BUILD_YEAR/texmf.cnf \
+    && echo shell_escape = t >> /usr/local/texlive/$BUILD_YEAR/texmf.cnf
 
 ENV PATH="/usr/local/texlive/${BUILD_YEAR}/bin/x86_64-linux:${PATH}"
 
