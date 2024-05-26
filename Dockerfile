@@ -38,7 +38,7 @@ RUN apt update -q \
 
 RUN mkdir -p /opt/plantuml \
     && curl -o /opt/plantuml/plantuml.jar -L "${PLANTUML_URL}" \
-    && printf '#!/bin/sh\nexec java -Djava.awt.headless=true -jar /opt/plantuml/plantuml.jar "$@"' > /usr/bin/plantuml \
+    && printf '#!/bin/sh\nexec java -Djava.awt.headless=true -XX:-UsePerfData -jar /opt/plantuml/plantuml.jar "$@"' > /usr/bin/plantuml \
     && chmod +x /usr/bin/plantuml
 
 
