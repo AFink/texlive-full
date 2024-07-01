@@ -55,12 +55,11 @@ RUN if [ "$BUILD_YEAR" = "$(date +%Y)" ]; then \
     export BUILD_REPOSITORY=https://ftp.tu-chemnitz.de/pub/tex/historic/systems/texlive/$BUILD_YEAR/tlnet-final; \
     fi \
     && mkdir /install-tl-unx \
-    &&  wget --quiet https://tug.org/texlive/files/texlive.asc \
-    &&  gpg --import texlive.asc \
-    &&  rm texlive.asc \
-    &&  wget --quiet $BUILD_REPOSITORY/install-tl-unx.tar.gz \
-    &&  wget --quiet $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512 \
-    &&  wget --quiet $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512.asc \
+	&&  wget -qO- https://tug.org/texlive/files/texlive.asc | gpg --import - \
+	&&  echo "5\n" | gpg --command-fd 0 --edit-key 0D5E5D9106BAB6BC trust quit
+    &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz \
+    &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512 \
+    &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512.asc \
     &&  gpg --verify install-tl-unx.tar.gz.sha512.asc \
     &&  sha512sum -c install-tl-unx.tar.gz.sha512 \
     &&  tar -xz -C /install-tl-unx --strip-components=1 -f install-tl-unx.tar.gz \
