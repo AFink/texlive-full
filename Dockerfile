@@ -50,9 +50,9 @@ ARG BUILD_SCHEME=scheme-full
 
 # Install TexLive
 RUN if [ "$BUILD_YEAR" = "$(date +%Y)" ]; then \
-    export BUILD_REPOSITORY=https://mirror.ctan.org/systems/texlive/tlnet; \
+    export BUILD_REPOSITORY=https://mirror.physik.tu-berlin.de/pub/CTAN/systems/texlive/tlnet; \
     else \
-    export BUILD_REPOSITORY=https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$BUILD_YEAR/tlnet-final/; \
+    export BUILD_REPOSITORY=https://ftp.tu-chemnitz.de/pub/tex/historic/systems/texlive/$BUILD_YEAR/tlnet-final; \
     fi \
     && mkdir /install-tl-unx \
     &&  wget --quiet https://tug.org/texlive/files/texlive.asc \
