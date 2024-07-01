@@ -56,7 +56,7 @@ RUN if [ "$BUILD_YEAR" = "$(date +%Y)" ]; then \
     fi \
     && mkdir /install-tl-unx \
 	&&  wget -qO- https://tug.org/texlive/files/texlive.asc | gpg --import - \
-	&&  echo "5\n" | gpg --command-fd 0 --edit-key 0D5E5D9106BAB6BC trust quit \
+	&&  echo "5\n" | gpg --batch --yes --command-fd 0 --edit-key 0D5E5D9106BAB6BC trust quit \
     &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz \
     &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512 \
     &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512.asc \
