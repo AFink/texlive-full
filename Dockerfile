@@ -61,6 +61,10 @@ RUN  (echo 5; echo y; echo save) | gpg --command-fd 0 --no-tty --no-greeting -q 
 
 RUN gpg --list-keys
 
+RUN echo $BUILD_REPOSITORY
+
+RUN export BUILD_REPOSITORY=https://mirror.physik.tu-berlin.de/pub/CTAN/systems/texlive/tlnet
+
 RUN  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz 
 RUN  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512 
 RUN  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512.asc 
