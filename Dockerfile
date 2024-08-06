@@ -61,23 +61,22 @@ RUN  (echo 5; echo y; echo save) | gpg --command-fd 0 --no-tty --no-greeting -q 
 
 RUN gpg --list-keys
 
-RUN  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz \
-    &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512 \
-    &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512.asc \
-    &&  tar -xz -C /install-tl-unx --strip-components=1 -f install-tl-unx.tar.gz \
-    &&  rm install-tl-unx.tar.gz* \
-    &&  echo "tlpdbopt_autobackup 0" >> /install-tl-unx/texlive.profile \
+RUN  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz 
+RUN  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512 
+RUN  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512.asc 
+RUN  tar -xz -C /install-tl-unx --strip-components=1 -f install-tl-unx.tar.gz 
+RUN  rm install-tl-unx.tar.gz* 
+RUN  echo "tlpdbopt_autobackup 0" >> /install-tl-unx/texlive.profile \
     &&  echo "tlpdbopt_install_docfiles 0" >> /install-tl-unx/texlive.profile \
     &&  echo "tlpdbopt_install_srcfiles 0" >> /install-tl-unx/texlive.profile \
-    &&  echo "selected_scheme ${BUILD_SCHEME}" >> /install-tl-unx/texlive.profile \
-    &&  /install-tl-unx/install-tl \
+    &&  echo "selected_scheme ${BUILD_SCHEME}" >> /install-tl-unx/texlive.profile 
+RUN  /install-tl-unx/install-tl \
         -profile /install-tl-unx/texlive.profile \
-        -repository $BUILD_REPOSITORY \
-    &&  $(find /usr/local/texlive -name tlmgr) path add \
-    &&  rm -rf /install-tl-unx \
-    # enable shell-escape by default
-    && echo % enable shell-escape by default >> /usr/local/texlive/$BUILD_YEAR/texmf.cnf \
-    && echo shell_escape = t >> /usr/local/texlive/$BUILD_YEAR/texmf.cnf
+        -repository $BUILD_REPOSITORY 
+RUN  $(find /usr/local/texlive -name tlmgr) path add 
+RUN  rm -rf /install-tl-unx 
+RUN echo % enable shell-escape by default >> /usr/local/texlive/$BUILD_YEAR/texmf.cnf 
+RUN echo shell_escape = t >> /usr/local/texlive/$BUILD_YEAR/texmf.cnf
 
 #RUN if [ "$BUILD_YEAR" = "$(date +%Y)" ]; then \
 #    export BUILD_REPOSITORY=https://mirror.physik.tu-berlin.de/pub/CTAN/systems/texlive/tlnet; \
