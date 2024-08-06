@@ -61,9 +61,10 @@ jobs:
     strategy:
       matrix:
         #texlive-year: [2020, 2021, 2022, 2023, 2024]
-        texlive-year: [2022, 2023, 2024]
-        texlive-scheme: [scheme-basic, scheme-medium, scheme-full]
-        # texlive-scheme: [scheme-basic, scheme-medium]
+#        texlive-year: [2022, 2023, 2024]
+        texlive-year: [2022]
+#        texlive-scheme: [scheme-basic, scheme-medium, scheme-full]
+        texlive-scheme: [scheme-basic]
     permissions:
       contents: read
       packages: write

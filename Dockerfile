@@ -55,9 +55,11 @@ RUN if [ "$BUILD_YEAR" = "$(date +%Y)" ]; then \
     export BUILD_REPOSITORY=https://ftp.tu-chemnitz.de/pub/tex/historic/systems/texlive/$BUILD_YEAR/tlnet-final; \
     fi \
     && mkdir /install-tl-unx \
-	&&  wget -qO- https://tug.org/texlive/files/texlive.asc | gpg --import - \
-	&&  echo "5\n" | gpg --batch --yes --command-fd 0 --edit-key 0D5E5D9106BAB6BC trust quit \
-    &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz \
+	&& wget -qO- https://tug.org/texlive/files/texlive.asc | gpg --import -
+
+RUN  (echo 5; echo y; echo save) | gpg --command-fd 0 --no-tty --no-greeting -q --edit-key 0D5E5D9106BAB6BC trust 
+
+RUN  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz \
     &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512 \
     &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512.asc \
     &&  gpg --verify install-tl-unx.tar.gz.sha512.asc \
@@ -76,6 +78,34 @@ RUN if [ "$BUILD_YEAR" = "$(date +%Y)" ]; then \
     # enable shell-escape by default
     && echo % enable shell-escape by default >> /usr/local/texlive/$BUILD_YEAR/texmf.cnf \
     && echo shell_escape = t >> /usr/local/texlive/$BUILD_YEAR/texmf.cnf
+
+#RUN if [ "$BUILD_YEAR" = "$(date +%Y)" ]; then \
+#    export BUILD_REPOSITORY=https://mirror.physik.tu-berlin.de/pub/CTAN/systems/texlive/tlnet; \
+#    else \
+#    export BUILD_REPOSITORY=https://ftp.tu-chemnitz.de/pub/tex/historic/systems/texlive/$BUILD_YEAR/tlnet-final; \
+#    fi \
+#    && mkdir /install-tl-unx \
+#	&&  wget -qO- https://tug.org/texlive/files/texlive.asc | gpg --import - \
+#	&&  echo "5\n" | gpg --batch --yes --command-fd 0 --edit-key 0D5E5D9106BAB6BC trust quit \
+#    &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz \
+#    &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512 \
+#    &&  wget -q $BUILD_REPOSITORY/install-tl-unx.tar.gz.sha512.asc \
+#    &&  gpg --verify install-tl-unx.tar.gz.sha512.asc \
+#    &&  sha512sum -c install-tl-unx.tar.gz.sha512 \
+#    &&  tar -xz -C /install-tl-unx --strip-components=1 -f install-tl-unx.tar.gz \
+#    &&  rm install-tl-unx.tar.gz* \
+#    &&  echo "tlpdbopt_autobackup 0" >> /install-tl-unx/texlive.profile \
+#    &&  echo "tlpdbopt_install_docfiles 0" >> /install-tl-unx/texlive.profile \
+#    &&  echo "tlpdbopt_install_srcfiles 0" >> /install-tl-unx/texlive.profile \
+#    &&  echo "selected_scheme ${BUILD_SCHEME}" >> /install-tl-unx/texlive.profile \
+#    &&  /install-tl-unx/install-tl \
+#        -profile /install-tl-unx/texlive.profile \
+#        -repository $BUILD_REPOSITORY \
+#    &&  $(find /usr/local/texlive -name tlmgr) path add \
+#    &&  rm -rf /install-tl-unx \
+#    # enable shell-escape by default
+#    && echo % enable shell-escape by default >> /usr/local/texlive/$BUILD_YEAR/texmf.cnf \
+#    && echo shell_escape = t >> /usr/local/texlive/$BUILD_YEAR/texmf.cnf
 
 ENV PATH="/usr/local/texlive/${BUILD_YEAR}/bin/x86_64-linux:${PATH}"
 
