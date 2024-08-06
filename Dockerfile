@@ -52,7 +52,7 @@ ARG BUILD_SCHEME=scheme-full
 RUN if [ "$BUILD_YEAR" = "$(date +%Y)" ]; then \
     export BUILD_REPOSITORY=https://mirror.physik.tu-berlin.de/pub/CTAN/systems/texlive/tlnet; \
     else \
-    export BUILD_REPOSITORY=https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/$BUILD_YEAR/tlnet-final; \
+    export BUILD_REPOSITORY=https://ftp.tu-chemnitz.de/pub/tug/historic/systems/texlive/$BUILD_YEAR/tlnet-final; \
     fi \
 	&& echo "BUILD_REPOSITORY is set to $BUILD_REPOSITORY" \
     && mkdir /install-tl-unx \
