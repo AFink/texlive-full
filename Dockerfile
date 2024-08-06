@@ -68,11 +68,11 @@ RUN if [ "$BUILD_YEAR" = "$(date +%Y)" ]; then \
     &&  echo "tlpdbopt_autobackup 0" >> /install-tl-unx/texlive.profile \
     &&  echo "tlpdbopt_install_docfiles 0" >> /install-tl-unx/texlive.profile \
     &&  echo "tlpdbopt_install_srcfiles 0" >> /install-tl-unx/texlive.profile \
-    &&  echo "selected_scheme ${BUILD_SCHEME}" >> /install-tl-unx/texlive.profile
-RUN  /install-tl-unx/install-tl \
+    &&  echo "selected_scheme ${BUILD_SCHEME}" >> /install-tl-unx/texlive.profile \
+	&&  /install-tl-unx/install-tl \
         -profile /install-tl-unx/texlive.profile \
-        -repository $BUILD_REPOSITORY 
-RUN  $(find /usr/local/texlive -name tlmgr) path add \
+        -repository $BUILD_REPOSITORY \
+	&&  $(find /usr/local/texlive -name tlmgr) path add \
     &&  rm -rf /install-tl-unx \
     && echo % enable shell-escape by default >> /usr/local/texlive/$BUILD_YEAR/texmf.cnf \
     && echo shell_escape = t >> /usr/local/texlive/$BUILD_YEAR/texmf.cnf
