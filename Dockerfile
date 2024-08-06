@@ -54,10 +54,13 @@ RUN if [ "$BUILD_YEAR" = "$(date +%Y)" ]; then \
     else \
     export BUILD_REPOSITORY=https://ftp.tu-chemnitz.de/pub/tex/historic/systems/texlive/$BUILD_YEAR/tlnet-final; \
     fi \
+	&& echo "BUILD_REPOSITORY is set to $BUILD_REPOSITORY"
     && mkdir /install-tl-unx \
 	&& wget -qO- https://tug.org/texlive/files/texlive.asc | gpg --import - \
 	&& (echo 5; echo y; echo save) | gpg --command-fd 0 --no-tty --no-greeting -q --edit-key 0D5E5D9106BAB6BC trust
-	
+
+RUN echo "BUILD_REPOSITORY is set to $BUILD_REPOSITORY"
+
 RUN  wget -q "${BUILD_REPOSITORY}/install-tl-unx.tar.gz" \
     &&  wget -q "${BUILD_REPOSITORY}/install-tl-unx.tar.gz.sha512" \
     &&  wget -q "${BUILD_REPOSITORY}/install-tl-unx.tar.gz.sha512.asc"
