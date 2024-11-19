@@ -79,6 +79,9 @@ RUN if [ "$BUILD_YEAR" = "$(date +%Y)" ]; then \
 
 ENV PATH="/usr/local/texlive/${BUILD_YEAR}/bin/x86_64-linux:${PATH}"
 
+RUN useradd -ms /bin/bash tex
+USER tex
+
 # installing texlive and utils
 #RUN apt update \
 #  && apt install -y \
